@@ -1,0 +1,25 @@
+﻿@page "/"
+@using blazorclient.Components
+
+<style>
+	.component-app {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		height: 100%;
+	}
+</style>
+
+<div className="component-app">
+	<Calculator_Display DisplayValue="@DisplayText" />
+	<Calculator_ButtonPanel  />
+</div>
+
+@code {
+	public string DisplayText { get; set; }
+
+	protected override void OnInitialized()
+	{
+		DisplayText = "222";
+	}
+}

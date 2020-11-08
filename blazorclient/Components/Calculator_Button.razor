@@ -1,0 +1,29 @@
+﻿<div class="@ClassName">
+	<button @onclick="@(async () => await ButtonClick.InvokeAsync(ButtonName))">@ButtonName</button>
+</div>
+
+@code {
+	[Parameter]
+	public string ButtonName { get; set; }
+	[Parameter]
+	public bool Orange { get; set; }
+	[Parameter]
+	public bool Wide { get; set; }
+	[Parameter]
+	public EventCallback<string> ButtonClick { get; set; }
+
+	public string ClassName { get; set; }
+
+	protected override void OnParametersSet()
+	{
+		ClassName = CreateClassName();
+	}
+
+	public string CreateClassName()
+	{
+		System.Text.StringBuilder className = new System.Text.StringBuilder("component-button");
+		if (Orange) className.AppendFormat(" {0}", nameof(Orange).ToLower());
+		if (Wide) className.AppendFormat(" {0}", nameof(Wide).ToLower());
+		return className.ToString();
+	}
+}

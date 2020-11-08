@@ -1,0 +1,39 @@
+﻿@using blazorclient.Components;
+
+<div className="component-button-panel">
+	<div>
+		<Calculator_Button ButtonName="AC" ButtonClick="ButtonClick"/>
+		<Calculator_Button ButtonName="" />
+		<Calculator_Button ButtonName="" />
+		<Calculator_Button ButtonName="" />
+		<Calculator_Button ButtonName="" Orange="true"/>
+	</div>
+	<div>
+		<Calculator_Button ButtonName="7" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="8" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="9" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="x" ButtonClick="ButtonClick" Orange="true" />
+	</div>
+	<div>
+		<Calculator_Button ButtonName="4" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="5" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="6" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="-" ButtonClick="ButtonClick" Orange="true" />
+	</div>
+	<div>
+		<Calculator_Button ButtonName="1" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="2" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="3" ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="+" ButtonClick="ButtonClick" Orange="true" />
+	</div>
+	<div>
+		<Calculator_Button ButtonName="0" ButtonClick="ButtonClick" Wide="true" />
+		<Calculator_Button ButtonName="." ButtonClick="ButtonClick" />
+		<Calculator_Button ButtonName="=" ButtonClick="ButtonClick" Orange="true" />
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public EventCallback<string> ButtonClick { get; set; }
+}
