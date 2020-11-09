@@ -1,25 +1,58 @@
 ﻿@page "/"
 @using blazorclient.Components
-
-<style>
-	.component-app {
-		display: flex;
-		flex-direction: column;
-		flex-wrap: wrap;
-		height: 100%;
-	}
-</style>
+@using blazorclient.Services
 
 <div className="component-app">
 	<Calculator_Display DisplayValue="@DisplayText" />
-	<Calculator_ButtonPanel  />
+	<Calculator_ButtonPanel ButtonClick="(async (buttonName) => await ButtonPressAsync(buttonName) )"  />
 </div>
 
 @code {
 	public string DisplayText { get; set; }
+	private Guid OperationId { get; set; }
+	private string _oldDisplayText;
+	[Inject]
+	public ICalculator CalculatorService { get; set; }
 
 	protected override void OnInitialized()
 	{
-		DisplayText = "222";
+		AC();
+	}
+
+	public async Task ButtonPressAsync(string currentButton)
+	{
+		if (currentButton == "H")
+			History();
+		else if (currentButton == "AC")
+			AC();
+		else if (currentButton == "=")
+			await Equal();
+		else
+		{
+			var calculator = CalculatorService.ParseCalculator(_oldDisplayText, currentButton);
+			if (calculator.CanCalculate)
+				await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId);
+		}
+		_oldDisplayText = currentButton;
+	}
+
+	private void AC()
+	{
+		OperationId = Guid.NewGuid();
+		DisplayText = "0";
+		_oldDisplayText = "0";
+	}
+
+	private async Task Equal()
+	{
+		DisplayText = (await CalculatorService.GetCalculatorStatusDapr(OperationId)).ToString();
+		_oldDisplayText = DisplayText;
+	}
+
+	private void History()
+	{
+		OperationId = Guid.NewGuid();
+		DisplayText = "0";
+		_oldDisplayText = "0";
 	}
 }
