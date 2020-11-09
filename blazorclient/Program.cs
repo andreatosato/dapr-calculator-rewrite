@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using blazorclient.Services;
 
 namespace blazorclient
 {
@@ -19,6 +20,7 @@ namespace blazorclient
 
             /*builder.HostEnvironment.BaseAddress*/
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:3500") });
+            builder.Services.AddScoped<ICalculator, CalculatorService>();
 
             await builder.Build().RunAsync();
         }

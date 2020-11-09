@@ -25,17 +25,19 @@ namespace blazorclient.Services
 
 		public ParseResult ParseCalculator(string previous, string value)
 		{
-			string newValue = previous + value;
+			string newValue = value == "=" ? previous : previous + value;
 			if (!newValue.Contains(Operators))
-				throw new InvalidOperationException("Nessun operatore selezionato");
+				return ParseResult.None;
+				//throw new InvalidOperationException("Nessun operatore selezionato");
 			var operands = newValue.Split(Operators).Where(x => !string.IsNullOrEmpty(x)).ToArray();
 			if (operands.Length > 2)
-				throw new ArgumentOutOfRangeException("Più operatori presenti");
+				return ParseResult.None;
+				//throw new ArgumentOutOfRangeException("Più operatori presenti");
 			if (operands.Length == 2)
 				return new ParseResult(newValue)
 				{
 					CanCalculate = true,
-					Operation = new ParseResult.OperationData(
+					Operation = new OperationData(
 						operands.ElementAt(0),
 						operands.ElementAt(1),
 						newValue.ElementAt(operands.ElementAt(0).Length))

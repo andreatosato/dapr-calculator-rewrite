@@ -53,12 +53,12 @@ body .github-fork-ribbon:before {
 /*Button*/
 .component-button {
     display: inline-flex;
-    width: 24%;
+    width: 25%;
     flex: 1 0 auto;
 }
 
     .component-button.wide {
-        width: 49%;
+        width: 50%;
     }
 
     .component-button button {

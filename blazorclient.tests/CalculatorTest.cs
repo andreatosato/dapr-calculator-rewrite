@@ -6,12 +6,13 @@ namespace blazorclient.tests
 {
 	public class CalculatorTest
 	{
-		private readonly CalculatorService calculator = new CalculatorService();
+		private readonly CalculatorService calculator = new CalculatorService(null);
 
 		[Fact]
 		public void CannotAppendNumber()
 		{
-			Assert.Throws<InvalidOperationException>(() => calculator.ParseCalculator("0", "1"));
+			var result = calculator.ParseCalculator("0", "1");
+			Assert.Equal(ParseResult.None, result);
 		}
 
 		[Fact]
@@ -51,6 +52,17 @@ namespace blazorclient.tests
 			Assert.True(result.CanCalculate);
 			Assert.Equal(0.3635m, result.Operation.FirstOperand);
 			Assert.Equal(2.35m, result.Operation.SecondOperand);
+			Assert.Equal('+', result.Operation.Operand);
+		}
+
+		[Fact]
+		public void CanCalculateEqual()
+		{
+			var result = calculator.ParseCalculator("0.3635+2.23552215", "=");
+			Assert.Equal("0.3635+2.23552215", result.NextValue);
+			Assert.True(result.CanCalculate);
+			Assert.Equal(0.3635m, result.Operation.FirstOperand);
+			Assert.Equal(2.23552215m, result.Operation.SecondOperand);
 			Assert.Equal('+', result.Operation.Operand);
 		}
 	}

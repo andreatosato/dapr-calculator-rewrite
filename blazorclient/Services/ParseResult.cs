@@ -2,6 +2,8 @@
 {
 	public class ParseResult
 	{
+		public static ParseResult None = new ParseResult();
+		protected ParseResult() { CanCalculate = false; }
 		public ParseResult(string nextValue)
 		{
 			NextValue = nextValue;

@@ -1,10 +1,11 @@
 ﻿@page "/"
 @using blazorclient.Components
 @using blazorclient.Services
+@inject NavigationManager NavigationManager
 
 <div className="component-app">
 	<Calculator_Display DisplayValue="@DisplayText" />
-	<Calculator_ButtonPanel ButtonClick="(async (buttonName) => await ButtonPressAsync(buttonName) )"  />
+	<Calculator_ButtonPanel ButtonClick="(async (buttonName) => await ButtonPressAsync(buttonName) )" />
 </div>
 
 @code {
@@ -26,14 +27,17 @@
 		else if (currentButton == "AC")
 			AC();
 		else if (currentButton == "=")
-			await Equal();
+		{
+			await Equal(currentButton);
+		}
 		else
 		{
-			var calculator = CalculatorService.ParseCalculator(_oldDisplayText, currentButton);
-			if (calculator.CanCalculate)
-				await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId);
+			if (_oldDisplayText == "0" && currentButton != ".")
+				_oldDisplayText = currentButton;
+			else
+				_oldDisplayText = _oldDisplayText + currentButton;
+			DisplayText = _oldDisplayText;
 		}
-		_oldDisplayText = currentButton;
 	}
 
 	private void AC()
@@ -43,16 +47,20 @@
 		_oldDisplayText = "0";
 	}
 
-	private async Task Equal()
+	private async Task Equal(string currentButton)
 	{
-		DisplayText = (await CalculatorService.GetCalculatorStatusDapr(OperationId)).ToString();
-		_oldDisplayText = DisplayText;
+		var calculator = CalculatorService.ParseCalculator(_oldDisplayText, currentButton);
+		if (calculator.CanCalculate)
+		{
+			await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId);
+			DisplayText = (await CalculatorService.GetCalculatorStatusDapr(OperationId)).ToString();
+			_oldDisplayText = DisplayText;
+		}
+		// TODO: log no operation can done
 	}
 
 	private void History()
 	{
-		OperationId = Guid.NewGuid();
-		DisplayText = "0";
-		_oldDisplayText = "0";
+		NavigationManager.NavigateTo("/history");
 	}
 }

@@ -1,0 +1,11 @@
+﻿@page "/History"
+@inject NavigationManager NavigationManager
+
+<h3>History</h3>
+
+@code {
+	public void BackToHome()
+	{
+		NavigationManager.NavigateTo("/");
+	}
+}
