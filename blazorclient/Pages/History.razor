@@ -1,9 +1,12 @@
-﻿@page "/History"
+﻿@page "/History/{OperationId}"
 @inject NavigationManager NavigationManager
 
 <h3>History</h3>
 
 @code {
+	[Parameter]
+	public string OperationId { get; set; }
+
 	public void BackToHome()
 	{
 		NavigationManager.NavigateTo("/");

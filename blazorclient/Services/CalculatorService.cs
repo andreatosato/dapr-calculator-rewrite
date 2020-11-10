@@ -62,6 +62,8 @@ namespace blazorclient.Services
 						Id = operationKey.ToString("N")
 					};
 					var responseAdd = await Http.PostAsJsonAsync("/v1.0/invoke/add-app/method/add", a);
+					if (!responseAdd.IsSuccessStatusCode)
+						throw new Exception(await responseAdd.Content.ReadAsStringAsync());
 					break;
 				case '-':
 					var s = new GenericOperation()
@@ -71,6 +73,8 @@ namespace blazorclient.Services
 						Id = operationKey.ToString("N")
 					};
 					var responseSub = await Http.PostAsJsonAsync("/v1.0/invoke/sub-app/method/sub", s);
+					if (!responseSub.IsSuccessStatusCode)
+						throw new Exception(await responseSub.Content.ReadAsStringAsync());
 					break;
 				default:
 					break;
@@ -79,7 +83,7 @@ namespace blazorclient.Services
 
 		public async Task<decimal> GetCalculatorStatusDapr(Guid operationKey)
 		{
-			var responseAdd = await Http.GetFromJsonAsync<string>("/v1.0/state/");
+			var responseAdd = await Http.GetFromJsonAsync<string>($"/v1.0/state/operations-store/{operationKey}");
 			return 0m;
 		}
 

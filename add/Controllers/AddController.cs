@@ -14,16 +14,16 @@
         /// </summary>
         public const string StoreName = "operations-store";
 
-        [HttpGet("{calculatoroperations}")]
-        public ActionResult<CurrentOperationValue> Get([FromState(StoreName)]StateEntry<CurrentOperationValue> operation)
-        {
-            if (operation.Value is null)
-            {
-                return this.NotFound();
-            }
-
-            return operation.Value;
-        }
+        ///[HttpGet("{calculatoroperations}")]
+        ///public ActionResult<CurrentOperationValue> Get([FromState(StoreName)]StateEntry<CurrentOperationValue> operation)
+        ///{
+        ///    if (operation.Value is null)
+        ///    {
+        ///        return this.NotFound();
+        ///    }
+        ///
+        ///    return operation.Value;
+        ///}
 
         [HttpPost("{add}")]
         public async Task<IActionResult> AddOperation(
