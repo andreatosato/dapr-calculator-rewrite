@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AddSample
 {
@@ -13,5 +13,13 @@ namespace AddSample
             Divide,
             Multiply
         }
+    }
+
+    public class GenericOperation
+    {
+        [Required]
+        public string Id { get; set; }
+        public decimal FirstOperand { get; set; }
+        public decimal SecondOperand { get; set; }
     }
 }

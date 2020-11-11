@@ -1,11 +1,11 @@
-﻿namespace AddSample.Controllers
-{
-    using System;
-    using System.Threading.Tasks;
-    using Dapr;
-    using Dapr.Client;
-    using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using Dapr;
+using Dapr.Client;
+using Microsoft.AspNetCore.Mvc;
 
+namespace AddSample.Controllers
+{
     [ApiController]
     public class AddController : ControllerBase
     {
@@ -44,8 +44,8 @@
             await daprClient.PublishEventAsync("Calculator", "AddOperation", currentOperation);
 
             // Set current state
-            var state = await daprClient.GetStateEntryAsync<CurrentOperationValue>(StoreName, genericOperation.Id);
-            state.Value = new CurrentOperationValue(resultOperation, genericOperation.Id);
+            var state = await daprClient.GetStateEntryAsync<decimal>(StoreName, genericOperation.Id);
+            state.Value = resultOperation;
             await state.SaveAsync();
 
             // Return Ok to client
@@ -79,7 +79,7 @@
         /// <summary>
         /// Method for returning a BadRequest result which will cause Dapr sidecar to throw an RpcException
         [HttpPost("throwException")]
-        public async Task<IActionResult> ThrowException(GenericOperation genericOperation, [FromServices] DaprClient daprClient)
+        public async Task<IActionResult> ThrowException(GenericOperation genericOperation)
         {
             Console.WriteLine("Enter ThrowException");
             var task = Task.Delay(10);

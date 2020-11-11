@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 
-namespace blazorclient.Services
+namespace audit
 {
     public class OperationHistory
-    {
-        public OperationHistory(ICollection<Operation> operations)
-        {
+	{
+		public OperationHistory(ICollection<Operation> operations)
+		{
             Operations = operations ?? new Collection<Operation>();
-        }
+		}
         public void AddOperation(Operation o)
-        {
+		{
             Operations.Add(o);
-        }
+		}
         public ICollection<Operation> Operations { get; }
-    }
+	}
 
     public class Operation
     {

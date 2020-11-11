@@ -83,9 +83,14 @@ namespace blazorclient.Services
 
 		public async Task<decimal> GetCalculatorStatusDapr(Guid operationKey)
 		{
-			var responseAdd = await Http.GetFromJsonAsync<string>($"/v1.0/state/operations-store/{operationKey}");
-			return 0m;
+			var currentTotal = await Http.GetFromJsonAsync<decimal>($"/v1.0/state/operations-store/{operationKey}");
+			return currentTotal;
 		}
 
+		public async Task<decimal> GetHistoryCalculatorStatusDapr(Guid operationKey)
+		{
+			var operationHistory = await Http.GetFromJsonAsync<OperationHistory>($"/v1.0/state/operations-history-store/{operationKey}");
+			return 0m;
+		}
 	}
 }
