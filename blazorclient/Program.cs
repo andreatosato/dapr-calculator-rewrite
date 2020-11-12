@@ -16,11 +16,10 @@ namespace blazorclient
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<App>("#app");
 
             /*builder.HostEnvironment.BaseAddress*/
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:3500") });
-            builder.Services.AddScoped<ICalculator, CalculatorService>();
 
             await builder.Build().RunAsync();
         }

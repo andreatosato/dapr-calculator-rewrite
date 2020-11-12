@@ -39,16 +39,10 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "redisHost": "localhost:6379",
-            "args": [],
-            "label": "daprd-debug",
-            "type": "dapr"
-        },
-        {
             "appId": "add-app",
             "appPort": 5000,
             "httpPort": 4001,
-            "label": "daprd-debug",
+            "label": "daprd-add-debug",
             "type": "daprd",
             "dependsOn": "build"
         },
@@ -56,18 +50,32 @@
             "appId": "sub-app",
             "appPort": 5000,
             "httpPort": 4002,
-            "label": "daprd-debug",
+            "label": "daprd-sub-debug",
             "type": "daprd",
             "dependsOn": "build"
         },
+        {
+            "appId": "audit-app",
+            "appPort": 5000,
+            "httpPort": 400,
+            "label": "daprd-audit-debug",
+            "type": "daprd",
+            "dependsOn": "build"
+        }
+        ,
         {
             "appId": "add-app",
             "label": "daprd-down",
             "type": "daprd-down"
         },
         {
+            "appId": "sub-app",
+            "label": "daprd-down",
+            "type": "daprd-down"
+        },
+        {
             "type": "docker-build",
-            "label": "docker-build: debug",
+            "label": "docker-add-build: debug",
             "dependsOn": [
                 "build"
             ],
@@ -84,7 +92,7 @@
         },
         {
             "type": "docker-build",
-            "label": "docker-build: release",
+            "label": "docker-add-build: release",
             "dependsOn": [
                 "build"
             ],
@@ -100,7 +108,7 @@
         },
         {
             "type": "docker-run",
-            "label": "docker-run: debug",
+            "label": "docker-add-run: debug",
             "dependsOn": [
                 "docker-build: debug"
             ],
@@ -112,7 +120,7 @@
         },
         {
             "type": "docker-run",
-            "label": "docker-run: release",
+            "label": "docker-add-run: release",
             "dependsOn": [
                 "docker-build: release"
             ],
@@ -120,6 +128,125 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/add/AddSample.csproj"
             }
-        }
+        },
+
+
+
+
+        {
+            "type": "docker-build",
+            "label": "docker-sub-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "calculator:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/sub/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/sub/sub.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-sub-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "calculator:latest",
+                "dockerfile": "${workspaceFolder}/sub/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/sub/sub.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-sub-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/sub/sub.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-sub-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/sub/sub.csproj"
+            }
+        },
+
+
+
+        {
+            "type": "docker-build",
+            "label": "docker-audit-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "calculator:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/audit/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/audit/audit.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-audit-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "calculator:latest",
+                "dockerfile": "${workspaceFolder}/audit/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/audit/audit.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-audit-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/audit/audit.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-audit-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/audit/audit.csproj"
+            }
+        },
     ]
 }

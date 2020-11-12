@@ -1,25 +1,24 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AddSample.Controllers
+namespace mul.Controllers
 {
     [ApiController]
-    public class AddController : ControllerBase
+    public class MulController : ControllerBase
     {
         /// <summary>
         /// State store name.
         /// </summary>
         public const string StoreName = "operations-store";
 
-        [HttpPost("{add}")]
-        public async Task<IActionResult> AddOperation(
+        [HttpPost("{mul}")]
+        public async Task<IActionResult> MulOperation(
             GenericOperation genericOperation,
             [FromServices] DaprClient daprClient)
         {
-            Console.WriteLine("Add Request");
+            Console.WriteLine("Mul Request");
             decimal resultOperation = genericOperation.FirstOperand + genericOperation.SecondOperand;
 
             // Add event to eventSource
@@ -29,7 +28,7 @@ namespace AddSample.Controllers
                     SecondOperand = genericOperation.SecondOperand,
                     Id = genericOperation.Id
                 },
-                OperationType = Operation.OperandType.Sum
+                OperationType = Operation.OperandType.Multiply
             };
             await daprClient.PublishEventAsync("Calculator", "CalculatorOperation", currentOperation);
 

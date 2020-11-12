@@ -9,7 +9,7 @@
         "type": "coreclr",
         "request": "launch",
         "preLaunchTask": "build",
-        "program": "${workspaceFolder}/add/bin/Debug/netcoreapp3.1/addsample.dll",
+        "program": "${workspaceFolder}/add/bin/Debug/net5/addsample.dll",
         "args": [],
         "cwd": "${workspaceFolder}",
         "stopAtEntry": false,
@@ -34,8 +34,8 @@
         "name": ".NET Core Launch (web) with Dapr",
         "type": "coreclr",
         "request": "launch",
-        "preLaunchTask": "daprd-debug",
-        "program": "${workspaceFolder}/add/bin/Debug/netcoreapp3.1/AddSample.dll",
+        "preLaunchTask": "daprd-audit-debug",
+        "program": "${workspaceFolder}/audit/bin/Debug/net5/audit.dll",
         "args": [],
         "cwd": "${workspaceFolder}",
         "stopAtEntry": false,
@@ -47,7 +47,7 @@
             "ASPNETCORE_ENVIRONMENT": "Development"
         },
         "sourceFileMap": {
-            "/Views": "${workspaceFolder}/add/Views"
+            "/Views": "${workspaceFolder}/audit/Views"
         },
         "postDebugTask": "daprd-down"
     },
