@@ -41,3 +41,5 @@ spec:
         ports:
         - containerPort: 80
         imagePullPolicy: Always
+      imagePullSecrets:
+        - name: acr-registry
