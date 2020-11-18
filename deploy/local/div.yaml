@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: add-app
+  name: div-app
   labels:
-    app: add-app
+    app: div-app
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
-      app: add-app
+      app: div-app
   template:
     metadata:
       labels:
-        app: add-app
+        app: div-app
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "add-app"
+        dapr.io/app-id: "div-app"
         dapr.io/app-port: "3000"
     spec:
       containers:
-      - name: add-app
-        image: dapriotregistry.azurecr.io/addsample:latest
+      - name: div-app
+        image: dapriotregistry.azurecr.io/div:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: Always

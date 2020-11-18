@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: add-app
+  name: mul-app
   labels:
-    app: add-app
+    app: mul-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: add-app
+      app: mul-app
   template:
     metadata:
       labels:
-        app: add-app
+        app: mul-app
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "add-app"
+        dapr.io/app-id: "mul-app"
         dapr.io/app-port: "3000"
     spec:
       containers:
-      - name: add-app
-        image: dapriotregistry.azurecr.io/addsample:latest
+      - name: mul-app
+        image: dapriotregistry.azurecr.io/mul:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: Always

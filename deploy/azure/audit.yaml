@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: add-app
+  name: audit-app
   labels:
-    app: add-app
+    app: audit-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: add-app
+      app: audit-app
   template:
     metadata:
       labels:
-        app: add-app
+        app: audit-app
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "add-app"
+        dapr.io/app-id: "audit-app"
         dapr.io/app-port: "3000"
     spec:
       containers:
-      - name: add-app
-        image: dapriotregistry.azurecr.io/addsample:latest
+      - name: audit-app
+        image: dapriotregistry.azurecr.io/audit:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: Always

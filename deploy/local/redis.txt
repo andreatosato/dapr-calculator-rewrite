@@ -1,0 +1,12 @@
+Windows: Run 
+
+kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" > encoded.b64
+
+which will create a file with your encoded password. Next, run 
+
+certutil -decode encoded.b64 password.txt
+
+which will put your redis password in a text file called password.txt. Copy the password and delete the two files.
+
+Redis:
+wMl2PHfdB3
