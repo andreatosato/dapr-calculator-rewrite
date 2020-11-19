@@ -16,13 +16,13 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "div-app"
-        dapr.io/app-port: "3000"
+        dapr.io/app-port: "3001"
     spec:
       containers:
       - name: div-app
         image: dapriotregistry.azurecr.io/div:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         imagePullPolicy: Always
       imagePullSecrets:
         - name: acr-registry

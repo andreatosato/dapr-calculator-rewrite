@@ -22,7 +22,7 @@ spec:
       - name: add-app
         image: dapriotregistry.azurecr.io/addsample:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         imagePullPolicy: Always
       imagePullSecrets:
         - name: acr-registry
