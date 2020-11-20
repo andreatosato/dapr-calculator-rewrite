@@ -1,16 +1,31 @@
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: basic-ingress
+#spec:
+#  backend:
+#    serviceName: calculator-front-end-service
+#    servicePort: 3010
+
+#---
 kind: Service
 apiVersion: v1
 metadata:
-  name: calculator-front-end
+  name: calculator-front-end-service
   labels:
-    app: calculator-front-end
+    app: calculator-front-end-service
 spec:
   selector:
     app: calculator-front-end
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3010
+  - name: http
+    protocol: TCP
+    port: 3011
+    targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 3010
+    targetPort: 443
   type: LoadBalancer
 
 ---
@@ -33,6 +48,7 @@ spec:
         dapr.io/enabled: "true"
         dapr.io/app-id: "calculator-front-end"
         dapr.io/app-port: "3010"
+        dapr.io/dapr-http-port: "3500"
         dapr.io/config: "appconfig"
     spec:
       containers:
@@ -40,6 +56,7 @@ spec:
         image: dapriotregistry.azurecr.io/blazorstatic:latest
         ports:
         - containerPort: 80
+        - containerPort: 443
         imagePullPolicy: Always
       imagePullSecrets:
         - name: acr-registry
