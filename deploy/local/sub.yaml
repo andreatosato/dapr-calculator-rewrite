@@ -15,8 +15,8 @@ spec:
         app: sub-app
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "sub-app"
-        dapr.io/app-port: "3500"
+        dapr.io/id: "sub-app"
+        dapr.io/port: "3001"
     spec:
       containers:
       - name: sub-app

@@ -19,7 +19,7 @@ namespace blazorclient
             builder.RootComponents.Add<App>("#app");
 
             /*builder.HostEnvironment.BaseAddress*/
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:3500") });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:3500") });
             builder.Services.AddScoped<ICalculator, CalculatorService>();
 
             await builder.Build().RunAsync();

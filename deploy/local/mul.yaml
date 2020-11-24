@@ -16,13 +16,14 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "mul-app"
-        dapr.io/app-port: "3002"
+        dapr.io/app-port: "443"
     spec:
       containers:
       - name: mul-app
         image: dapriotregistry.azurecr.io/mul:latest
         ports:
         - containerPort: 80
+        - containerPort: 443
         imagePullPolicy: Always
       imagePullSecrets:
         - name: acr-registry

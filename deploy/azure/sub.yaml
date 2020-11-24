@@ -5,7 +5,7 @@ metadata:
   labels:
     app: sub-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: sub-app
@@ -15,12 +15,15 @@ spec:
         app: sub-app
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "sub-app"
-        dapr.io/app-port: "80"
+        dapr.io/id: "sub-app"
+        dapr.io/port: "3001"
     spec:
       containers:
       - name: sub-app
         image: dapriotregistry.azurecr.io/sub:latest
         ports:
         - containerPort: 80
+        - containerPort: 443
         imagePullPolicy: Always
+      imagePullSecrets:
+        - name: acr-registry

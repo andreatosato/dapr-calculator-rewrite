@@ -6,9 +6,11 @@ spec:
   type: state.redis
   metadata:
   - name: "redisHost"
-    value: "REPLACE_HOST"
+    value: "dapriotcache.redis.cache.windows.net:6379"
   - name: "redisPassword"
-    value: "REPLACE_SECRET"
+    value: "+JvTKb3g+1oKTzZRbg96mWHd0RZ3fvzXrycdBttsdQk="
+  - name: enableTLS
+    value: "true"
 ---
 apiVersion: dapr.io/v1alpha1
 kind: Component
@@ -18,6 +20,8 @@ spec:
   type: pubsub.redis
   metadata:
   - name: "redisHost"
-    value: "REPLACE_HOST"
+    value: "dapriotcache.redis.cache.windows.net:6379"
   - name: "redisPassword"
-    value: "REPLACE_SECRET"
+    value: "+JvTKb3g+1oKTzZRbg96mWHd0RZ3fvzXrycdBttsdQk="
+  - name: enableTLS
+    value: "true"

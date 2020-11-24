@@ -5,7 +5,7 @@ metadata:
   labels:
     app: div-app
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: div-app
@@ -16,11 +16,14 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "div-app"
-        dapr.io/app-port: "3000"
+        dapr.io/app-port: "443"
     spec:
       containers:
       - name: div-app
         image: dapriotregistry.azurecr.io/div:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 80
+        - containerPort: 443
         imagePullPolicy: Always
+      imagePullSecrets:
+        - name: acr-registry
