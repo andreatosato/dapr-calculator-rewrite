@@ -16,7 +16,7 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "div-app"
-        dapr.io/app-port: "443"
+        dapr.io/app-port: "3002"
     spec:
       containers:
       - name: div-app
