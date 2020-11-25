@@ -47,7 +47,7 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "calculator-front-end"
-        dapr.io/app-port: "443"
+        dapr.io/app-port: "80"
         dapr.io/config: "appconfig"
     spec:
       containers:

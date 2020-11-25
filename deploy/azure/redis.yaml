@@ -6,7 +6,7 @@ spec:
   type: state.redis
   metadata:
   - name: "redisHost"
-    value: "dapriotcache.redis.cache.windows.net:6379"
+    value: "dapriotcache.redis.cache.windows.net:6380"
   - name: "redisPassword"
     value: "+JvTKb3g+1oKTzZRbg96mWHd0RZ3fvzXrycdBttsdQk="
   - name: enableTLS
@@ -16,11 +16,12 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: messagebus
+  namespace: default
 spec:
   type: pubsub.redis
   metadata:
   - name: "redisHost"
-    value: "dapriotcache.redis.cache.windows.net:6379"
+    value: "dapriotcache.redis.cache.windows.net:6380"
   - name: "redisPassword"
     value: "+JvTKb3g+1oKTzZRbg96mWHd0RZ3fvzXrycdBttsdQk="
   - name: enableTLS

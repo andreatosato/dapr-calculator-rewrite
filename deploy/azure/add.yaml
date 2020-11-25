@@ -18,6 +18,7 @@ spec:
         dapr.io/app-id: "add-app"
         dapr.io/app-port: "80"
         dapr.io/log-level: "debug"
+        dapr.io/enable-profiling: "true"
     spec:
       containers:
       - name: add-app
