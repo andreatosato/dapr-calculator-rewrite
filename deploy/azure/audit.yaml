@@ -16,7 +16,7 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "audit-app"
-        dapr.io/app-port: "3008"
+        dapr.io/app-port: "80"
     spec:
       containers:
       - name: audit-app

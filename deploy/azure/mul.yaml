@@ -16,7 +16,7 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "mul-app"
-        dapr.io/app-port: "3003"
+        dapr.io/app-port: "80"
     spec:
       containers:
       - name: mul-app

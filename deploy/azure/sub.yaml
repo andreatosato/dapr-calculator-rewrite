@@ -16,11 +16,18 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/id: "sub-app"
-        dapr.io/port: "3004"
+        dapr.io/port: "80"
     spec:
       containers:
       - name: sub-app
         image: dapriotregistry.azurecr.io/sub:latest
+        # resources:
+        #   limits:
+        #     memory: 512Mi
+        #     cpu: "1"
+        #   requests:
+        #     memory: 256Mi
+        #     cpu: "0.2"
         ports:
         - containerPort: 80
         - containerPort: 443
