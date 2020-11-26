@@ -19,7 +19,7 @@ namespace div.Controllers
             [FromServices] DaprClient daprClient)
         {
             Console.WriteLine("Div Request");
-            decimal resultOperation = genericOperation.FirstOperand + genericOperation.SecondOperand;
+            decimal resultOperation = genericOperation.FirstOperand / genericOperation.SecondOperand;
 
             // Add event to eventSource
             var currentOperation = new Operation() { 
