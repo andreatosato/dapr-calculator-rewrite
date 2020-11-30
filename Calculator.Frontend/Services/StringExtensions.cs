@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace blazorclient.Services
+namespace Calculator.Frontend.Services
 {
 	public static class StringExtension
 	{

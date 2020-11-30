@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: calculator-front-end
-        image: dapriotregistry.azurecr.io/blazorstatic:latest
+        image: dapriotregistry.azurecr.io/calculatorfrontend:latest
         ports:
         - containerPort: 80
         - containerPort: 443

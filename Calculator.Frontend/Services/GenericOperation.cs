@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace blazorclient.Services
+namespace Calculator.Frontend.Services
 {
     public class OperationHistory
     {

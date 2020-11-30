@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-using blazorclient.Services;
+using Calculator.Frontend.Services;
 
 namespace blazorclient.tests
 {

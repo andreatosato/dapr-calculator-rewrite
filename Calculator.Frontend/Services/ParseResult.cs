@@ -1,4 +1,4 @@
-﻿namespace blazorclient.Services
+﻿namespace Calculator.Frontend.Services
 {
 	public class ParseResult
 	{

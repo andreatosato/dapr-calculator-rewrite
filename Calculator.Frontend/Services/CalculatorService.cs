@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace blazorclient.Services
+namespace Calculator.Frontend.Services
 {
 	public interface ICalculator
 	{
@@ -75,6 +75,28 @@ namespace blazorclient.Services
 					var responseSub = await Http.PostAsJsonAsync("/v1.0/invoke/sub-app/method/sub", s);
 					if (!responseSub.IsSuccessStatusCode)
 						throw new Exception(await responseSub.Content.ReadAsStringAsync());
+					break;
+				case '/':
+					var d = new GenericOperation()
+					{
+						FirstOperand = operationData.FirstOperand,
+						SecondOperand = operationData.SecondOperand,
+						Id = operationKey.ToString("N")
+					};
+					var responseDiv = await Http.PostAsJsonAsync("/v1.0/invoke/div-app/method/div", d);
+					if (!responseDiv.IsSuccessStatusCode)
+						throw new Exception(await responseDiv.Content.ReadAsStringAsync());
+					break;
+				case '*':
+					var m = new GenericOperation()
+					{
+						FirstOperand = operationData.FirstOperand,
+						SecondOperand = operationData.SecondOperand,
+						Id = operationKey.ToString("N")
+					};
+					var responseMul = await Http.PostAsJsonAsync("/v1.0/invoke/mul-app/method/mul", m);
+					if (!responseMul.IsSuccessStatusCode)
+						throw new Exception(await responseMul.Content.ReadAsStringAsync());
 					break;
 				default:
 					break;
