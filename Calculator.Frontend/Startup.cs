@@ -23,7 +23,8 @@ namespace Calculator.Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor()
+                .AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddScoped(sp => new HttpClient { 
                 BaseAddress = new Uri("http://localhost:3500")
             });

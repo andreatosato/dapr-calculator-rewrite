@@ -9,58 +9,59 @@
 </div>
 
 @code {
-	public string DisplayText { get; set; }
-	private Guid OperationId { get; set; }
-	private string _oldDisplayText;
-	[Inject]
-	public ICalculator CalculatorService { get; set; }
+    public string DisplayText { get; set; }
+    private Guid OperationId { get; set; }
+    private string _oldDisplayText;
+    [Inject]
+    public ICalculator CalculatorService { get; set; }
 
-	protected override void OnInitialized()
-	{
-		AC();
-	}
+    protected override void OnInitialized()
+    {
+        AC();
+    }
 
-	public async Task ButtonPressAsync(string currentButton)
-	{
-		if (currentButton == "H")
-			History();
-		else if (currentButton == "AC")
-			AC();
-		else if (currentButton == "=")
-		{
-			await Equal(currentButton);
-		}
-		else
-		{
-			if (_oldDisplayText == "0" && currentButton != ".")
-				_oldDisplayText = currentButton;
-			else
-				_oldDisplayText = _oldDisplayText + currentButton;
-			DisplayText = _oldDisplayText;
-		}
-	}
+    public async Task ButtonPressAsync(string currentButton)
+    {
+        if (currentButton == "H")
+            History();
+        else if (currentButton == "AC")
+            AC();
+        else if (currentButton == "=")
+        {
+            await Equal(currentButton);
+        }
+        else
+        {
+            if (_oldDisplayText == "0" && currentButton != ".")
+                _oldDisplayText = currentButton;
+            else
+                _oldDisplayText = _oldDisplayText + currentButton;
+            DisplayText = _oldDisplayText;
+        }
+    }
 
-	private void AC()
-	{
-		OperationId = Guid.NewGuid();
-		DisplayText = "0";
-		_oldDisplayText = "0";
-	}
+    private void AC()
+    {
+        OperationId = Guid.NewGuid();
+        DisplayText = "0";
+        _oldDisplayText = "0";
+    }
 
-	private async Task Equal(string currentButton)
-	{
-		var calculator = CalculatorService.ParseCalculator(_oldDisplayText, currentButton);
-		if (calculator.CanCalculate)
-		{
-			await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId);
-			DisplayText = (await CalculatorService.GetCalculatorStatusDapr(OperationId)).ToString();
-			_oldDisplayText = DisplayText;
-		}
-		// TODO: log no operation can done
-	}
+    private async Task Equal(string currentButton)
+    {
+        var calculator = CalculatorService.ParseCalculator(_oldDisplayText, currentButton);
+        if (calculator.CanCalculate)
+        {
+            decimal result = await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId);
+            await CalculatorService.SaveCalculatorStatusDapr(OperationId, result);
+            DisplayText = result.ToString();
+            _oldDisplayText = DisplayText;
+        }
+        // TODO: log no operation can done
+    }
 
-	private void History()
-	{
-		NavigationManager.NavigateTo($"/history/{OperationId.ToString()}");
-	}
+    private void History()
+    {
+        NavigationManager.NavigateTo($"/history/{OperationId.ToString()}");
+    }
 }

@@ -9,8 +9,9 @@ namespace Calculator.Frontend.Services
 	public interface ICalculator
 	{
 		ParseResult ParseCalculator(string previous, string value);
-		Task RunCalculatorDapr(OperationData operationData, Guid operationKey);
+		Task<decimal> RunCalculatorDapr(OperationData operationData, Guid operationKey);
 		Task<decimal> GetCalculatorStatusDapr(Guid operationKey);
+		Task SaveCalculatorStatusDapr(Guid operationKey, decimal currentOperation);
 	}
 
 	public class CalculatorService : ICalculator
@@ -50,8 +51,9 @@ namespace Calculator.Frontend.Services
 				};
 		}
 
-		public async Task RunCalculatorDapr(OperationData operationData, Guid operationKey)
+		public async Task<decimal> RunCalculatorDapr(OperationData operationData, Guid operationKey)
 		{
+			HttpResponseMessage responseMessage = null;
 			switch (operationData.Operand)
 			{
 				case '+':
@@ -61,9 +63,9 @@ namespace Calculator.Frontend.Services
 						SecondOperand = operationData.SecondOperand,
 						Id = operationKey.ToString("N")
 					};
-					var responseAdd = await Http.PostAsJsonAsync("/v1.0/invoke/add-app/method/add", a);
-					if (!responseAdd.IsSuccessStatusCode)
-						throw new Exception(await responseAdd.Content.ReadAsStringAsync());
+					responseMessage = await Http.PostAsJsonAsync("/v1.0/invoke/add-app/method/add", a);
+					if (!responseMessage.IsSuccessStatusCode)
+						throw new Exception(await responseMessage.Content.ReadAsStringAsync());
 					break;
 				case '-':
 					var s = new GenericOperation()
@@ -72,9 +74,13 @@ namespace Calculator.Frontend.Services
 						SecondOperand = operationData.SecondOperand,
 						Id = operationKey.ToString("N")
 					};
-					var responseSub = await Http.PostAsJsonAsync("/v1.0/invoke/sub-app/method/sub", s);
-					if (!responseSub.IsSuccessStatusCode)
-						throw new Exception(await responseSub.Content.ReadAsStringAsync());
+					responseMessage = await Http.PostAsJsonAsync("/v1.0/invoke/sub-app/method/sub", s);
+					if (!responseMessage.IsSuccessStatusCode)
+                    {
+						string error = await responseMessage.Content.ReadAsStringAsync();
+						Console.WriteLine(error);
+						throw new Exception(error);
+					}
 					break;
 				case '/':
 					var d = new GenericOperation()
@@ -83,9 +89,9 @@ namespace Calculator.Frontend.Services
 						SecondOperand = operationData.SecondOperand,
 						Id = operationKey.ToString("N")
 					};
-					var responseDiv = await Http.PostAsJsonAsync("/v1.0/invoke/div-app/method/div", d);
-					if (!responseDiv.IsSuccessStatusCode)
-						throw new Exception(await responseDiv.Content.ReadAsStringAsync());
+					responseMessage = await Http.PostAsJsonAsync("/v1.0/invoke/div-app/method/div", d);
+					if (!responseMessage.IsSuccessStatusCode)
+						throw new Exception(await responseMessage.Content.ReadAsStringAsync());
 					break;
 				case '*':
 					var m = new GenericOperation()
@@ -94,19 +100,30 @@ namespace Calculator.Frontend.Services
 						SecondOperand = operationData.SecondOperand,
 						Id = operationKey.ToString("N")
 					};
-					var responseMul = await Http.PostAsJsonAsync("/v1.0/invoke/mul-app/method/mul", m);
-					if (!responseMul.IsSuccessStatusCode)
-						throw new Exception(await responseMul.Content.ReadAsStringAsync());
+					responseMessage = await Http.PostAsJsonAsync("/v1.0/invoke/mul-app/method/mul", m);
+					if (!responseMessage.IsSuccessStatusCode)
+						throw new Exception(await responseMessage.Content.ReadAsStringAsync());
 					break;
 				default:
 					break;
 			}
+			string result = await responseMessage.Content.ReadAsStringAsync();
+			return decimal.Parse(result);
 		}
 
 		public async Task<decimal> GetCalculatorStatusDapr(Guid operationKey)
 		{
 			var currentTotal = await Http.GetFromJsonAsync<decimal>($"/v1.0/state/operations-store/{operationKey}");
 			return currentTotal;
+		}
+
+		public async Task SaveCalculatorStatusDapr(Guid operationKey, decimal currentOperation)
+		{
+			var message = await Http.PostAsJsonAsync($"/v1.0/state/operations-store/{operationKey}", currentOperation);
+			if(!message.IsSuccessStatusCode)
+            {
+				// Log
+            }
 		}
 
 		public async Task<decimal> GetHistoryCalculatorStatusDapr(Guid operationKey)

@@ -33,12 +33,12 @@ namespace div.Controllers
             await daprClient.PublishEventAsync("Calculator", "CalculatorOperation", currentOperation);
 
             // Set current state
-            var state = await daprClient.GetStateEntryAsync<decimal>(StoreName, genericOperation.Id);
-            state.Value = resultOperation;
-            await state.SaveAsync();
+            //var state = await daprClient.GetStateEntryAsync<decimal>(StoreName, genericOperation.Id);
+            //state.Value = resultOperation;
+            //await state.SaveAsync();
 
             // Return Ok to client
-            return Ok();
+            return Ok(resultOperation);
         }
 
         /// <summary>
