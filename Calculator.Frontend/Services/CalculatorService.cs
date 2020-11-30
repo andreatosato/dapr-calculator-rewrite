@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -17,9 +18,11 @@ namespace Calculator.Frontend.Services
 	public class CalculatorService : ICalculator
 	{
 		private readonly char[] Operators = new char[] { '+', '-', 'x', '/' };
-		public CalculatorService(HttpClient http)
+		private ILogger logger;
+		public CalculatorService(HttpClient http, ILoggerFactory factory)
 		{
 			Http = http;
+			logger = factory.CreateLogger(nameof(CalculatorService));
 		}
 
 		public HttpClient Http { get; }
@@ -79,7 +82,8 @@ namespace Calculator.Frontend.Services
                     {
 						string error = await responseMessage.Content.ReadAsStringAsync();
 						Console.WriteLine(error);
-						throw new Exception(error);
+						logger.LogError(error);
+						throw new Exception(responseMessage.StatusCode + error);
 					}
 					break;
 				case '/':

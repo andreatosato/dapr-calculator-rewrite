@@ -24,12 +24,15 @@ namespace Calculator.Frontend
         {
             services.AddRazorPages();
             services.AddServerSideBlazor()
-                .AddCircuitOptions(options => { options.DetailedErrors = true; });
+                .AddCircuitOptions(options => 
+                {
+                    options.DetailedErrors = true; 
+                });
             services.AddScoped(sp => new HttpClient { 
                 BaseAddress = new Uri("http://localhost:3500")
             });
             services.AddScoped<ICalculator, CalculatorService>();
-
+            services.AddLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +51,6 @@ namespace Calculator.Frontend
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
