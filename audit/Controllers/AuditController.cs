@@ -15,7 +15,7 @@ namespace audit.Controllers
         /// </summary>
         public const string StoreName = "operations-history-store";
 
-        [Topic("Calculator", "CalculatorOperation")]
+        [Topic("calculator", "CalculatorOperation")]
         //[HttpPost("withdraw")]
         public async Task<ActionResult<OperationHistory>> PushElement(Operation operation, [FromServices] DaprClient daprClient)
         {

@@ -31,7 +31,7 @@ namespace AddSample.Controllers
                 },
                 OperationType = Operation.OperandType.Sum
             };
-            await daprClient.PublishEventAsync("Calculator", "CalculatorOperation", currentOperation);
+            await daprClient.PublishEventAsync("calculator", "CalculatorOperation", currentOperation);
 
             //// Set current state
             //var state = await daprClient.GetStateEntryAsync<decimal>(StoreName, genericOperation.Id);

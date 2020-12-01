@@ -30,7 +30,7 @@ namespace mul.Controllers
                 },
                 OperationType = Operation.OperandType.Multiply
             };
-            await daprClient.PublishEventAsync("Calculator", "CalculatorOperation", currentOperation);
+            await daprClient.PublishEventAsync("calculator", "CalculatorOperation", currentOperation);
 
             // Set current state
             //var state = await daprClient.GetStateEntryAsync<decimal>(StoreName, genericOperation.Id);

@@ -30,7 +30,7 @@ namespace div.Controllers
                 },
                 OperationType = Operation.OperandType.Divide
             };
-            await daprClient.PublishEventAsync("Calculator", "CalculatorOperation", currentOperation);
+            await daprClient.PublishEventAsync("calculator", "CalculatorOperation", currentOperation);
 
             // Set current state
             //var state = await daprClient.GetStateEntryAsync<decimal>(StoreName, genericOperation.Id);

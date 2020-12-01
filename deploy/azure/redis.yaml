@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: statestore
+  name: operations-store
 spec:
   type: state.redis
   metadata:
@@ -15,7 +15,7 @@ spec:
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: messagebus
+  name: calculator
   namespace: default
 spec:
   type: pubsub.redis
