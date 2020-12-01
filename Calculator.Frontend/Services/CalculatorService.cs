@@ -97,6 +97,7 @@ namespace Calculator.Frontend.Services
 					if (!responseMessage.IsSuccessStatusCode)
 						throw new Exception(await responseMessage.Content.ReadAsStringAsync());
 					break;
+				case 'x':
 				case '*':
 					var m = new GenericOperation()
 					{

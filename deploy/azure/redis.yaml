@@ -16,13 +16,8 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: calculator
-  namespace: default
 spec:
-  type: pubsub.redis
+  type: pubsub.azure.servicebus
   metadata:
-  - name: "redisHost"
-    value: "dapriotcache.redis.cache.windows.net:6380"
-  - name: "redisPassword"
-    value: "+JvTKb3g+1oKTzZRbg96mWHd0RZ3fvzXrycdBttsdQk="
-  - name: enableTLS
-    value: "true"
+  - name: connectionString
+    value: Endpoint=sb://dapriobus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=j6Y+pv8FBacjouHM6pzNAv9rGDG/QVYYSwaczwbPy6Q=
