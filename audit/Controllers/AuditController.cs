@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Dapr;
 using Dapr.Client;
@@ -15,8 +16,18 @@ namespace audit.Controllers
         /// </summary>
         public const string StoreName = "operations-history-store";
 
+        [HttpGet("{audit}/{operationId}")]
+        public async Task<IActionResult> Audit(Guid operationId,
+            [FromServices] DaprClient daprClient)
+        {
+            var state = await daprClient.GetStateEntryAsync<OperationHistory>(StoreName, operationId.ToString());
+            if (state.Value == null)
+                return Ok(OperationHistory.None);
+
+            return Ok(state.Value);
+        }
+
         [Topic("calculator", "CalculatorOperation")]
-        //[HttpPost("withdraw")]
         public async Task<ActionResult<OperationHistory>> PushElement(Operation operation, [FromServices] DaprClient daprClient)
         {
             var state = await daprClient.GetStateEntryAsync<OperationHistory>(StoreName, operation.OperationData.Id);

@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Calculator.Frontend.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,7 @@ namespace Calculator.Frontend
             });
             services.AddScoped<ICalculator, CalculatorService>();
             services.AddLogging();
+            services.AddBlazoredLocalStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

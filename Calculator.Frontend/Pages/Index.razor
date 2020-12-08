@@ -1,30 +1,45 @@
 ﻿@page "/"
 @using Calculator.Frontend.Components
 @using Calculator.Frontend.Services
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager NavigationManager
 
 <div className="component-app">
-	<Calculator_Display DisplayValue="@DisplayText" />
-	<Calculator_ButtonPanel ButtonClick="(async (buttonName) => await ButtonPressAsync(buttonName) )" />
+    <Calculator_Display DisplayValue="@DisplayText" />
+    <Calculator_ButtonPanel ButtonClick="(async (buttonName) => await ButtonPressAsync(buttonName) )" />
 </div>
 
 @code {
+    private const string OperationKeyId = nameof(OperationKeyId);
     public string DisplayText { get; set; }
     private Guid OperationId { get; set; }
     private string _oldDisplayText;
     [Inject]
     public ICalculator CalculatorService { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        AC();
+        if (firstRender)
+        {
+            if (await localStorage.ContainKeyAsync(OperationKeyId).ConfigureAwait(false))
+            {
+                var id = await localStorage.GetItemAsync<Guid>(OperationKeyId).ConfigureAwait(false);
+                decimal historyValue = await CalculatorService.GetCalculatorStatusDapr(id).ConfigureAwait(false);
+                SetInitCalculator(historyValue);
+            }
+            else
+            {
+                AC();
+            }
+            await InvokeAsync(() => StateHasChanged());
+        }
     }
 
     public async Task ButtonPressAsync(string currentButton)
     {
-        if (currentButton == "H")
+        if (currentButton.ToUpper() == "H")
             History();
-        else if (currentButton == "AC")
+        else if (currentButton.ToUpper() == "AC")
             AC();
         else if (currentButton == "=")
         {
@@ -43,8 +58,14 @@
     private void AC()
     {
         OperationId = Guid.NewGuid();
-        DisplayText = "0";
-        _oldDisplayText = "0";
+        localStorage.SetItemAsync<Guid>(OperationKeyId, OperationId);
+        SetInitCalculator(0);
+    }
+
+    private void SetInitCalculator(decimal value)
+    {
+        DisplayText = value.ToString();
+        _oldDisplayText = DisplayText;
     }
 
     private async Task Equal(string currentButton)
@@ -52,7 +73,7 @@
         var calculator = CalculatorService.ParseCalculator(_oldDisplayText, currentButton);
         if (calculator.CanCalculate)
         {
-            decimal result = await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId);
+            decimal result = await CalculatorService.RunCalculatorDapr(calculator.Operation, OperationId).ConfigureAwait(false);
             await CalculatorService.SaveCalculatorStatusDapr(OperationId, result);
             DisplayText = result.ToString();
             _oldDisplayText = DisplayText;

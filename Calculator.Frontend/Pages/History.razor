@@ -1,14 +1,73 @@
 ﻿@page "/History/{OperationId}"
+@using Calculator.Frontend.Services
 @inject NavigationManager NavigationManager
 
-<h3>History</h3>
+<div className="component-app">
+    <div class="button-back">
+        <button @onclick="@BackToHome">Back</button>
+    </div>
+
+    <div class="grid-history">
+        @foreach (var o in Operations)
+        {
+            <div class="grid-cell">@o.OperationData.FirstOperand</div>
+            <div class="grid-cell">@(ConvertOperationType(o.OperationType))</div>
+            <div class="grid-cell">@o.OperationData.SecondOperand</div>
+        }
+    </div>
+</div>
 
 @code {
-	[Parameter]
-	public string OperationId { get; set; }
+    [Parameter]
+    public string OperationId { get; set; }
+    [Inject]
+    public ICalculator CalculatorService { get; set; }
+    public ICollection<Operation> Operations { get; set; } = Array.Empty<Operation>();
 
-	public void BackToHome()
-	{
-		NavigationManager.NavigateTo("/");
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        Operations = await CalculatorService.GetHistoryCalculatorStatusDapr(Guid.Parse(OperationId)).ConfigureAwait(false);
+        //Operations = new Operation[]
+        //{
+        //new Operation() {
+        //    OperationType = Operation.OperandType.Sum,
+        //    OperationData = new GenericOperation
+        //    {
+        //        FirstOperand = 12,
+        //        SecondOperand = 3,
+        //        Id = OperationId
+        //    }
+        //},
+        //new Operation() {
+        //    OperationType = Operation.OperandType.Subtracti,
+        //    OperationData = new GenericOperation
+        //    {
+        //        FirstOperand = 3,
+        //        SecondOperand = 2,
+        //        Id = OperationId
+        //    }
+        //}
+        //};
+    }
+
+    public void BackToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    public string ConvertOperationType(Operation.OperandType type)
+    {
+        switch (type)
+        {
+            case Operation.OperandType.Sum:
+                return "+";
+            case Operation.OperandType.Subtracti:
+                return "-";
+            case Operation.OperandType.Divide:
+                return "/";
+            case Operation.OperandType.Multiply:
+                return "X";
+        }
+        return "";
+    }
 }

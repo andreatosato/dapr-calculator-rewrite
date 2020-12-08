@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -13,6 +14,7 @@ namespace Calculator.Frontend.Services
 		Task<decimal> RunCalculatorDapr(OperationData operationData, Guid operationKey);
 		Task<decimal> GetCalculatorStatusDapr(Guid operationKey);
 		Task SaveCalculatorStatusDapr(Guid operationKey, decimal currentOperation);
+		Task<ICollection<Operation>> GetHistoryCalculatorStatusDapr(Guid operationKey);
 	}
 
 	public class CalculatorService : ICalculator
@@ -118,8 +120,19 @@ namespace Calculator.Frontend.Services
 
 		public async Task<decimal> GetCalculatorStatusDapr(Guid operationKey)
 		{
-			var currentTotal = await Http.GetFromJsonAsync<decimal>($"/v1.0/state/operations-store/{operationKey}");
-			return currentTotal;
+            try
+            {
+				var response = await Http.GetAsync($"/v1.0/state/operations-store/{operationKey}");
+				if (!response.IsSuccessStatusCode)
+					return 0m;
+				return decimal.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+			}
+            catch (Exception ex)
+            {
+				// log
+				return 0m;
+            }
+			
 		}
 
 		public async Task SaveCalculatorStatusDapr(Guid operationKey, decimal currentOperation)
@@ -131,10 +144,10 @@ namespace Calculator.Frontend.Services
             }
 		}
 
-		public async Task<decimal> GetHistoryCalculatorStatusDapr(Guid operationKey)
+		public async Task<ICollection<Operation>> GetHistoryCalculatorStatusDapr(Guid operationKey)
 		{
-			var operationHistory = await Http.GetFromJsonAsync<OperationHistory>($"/v1.0/state/operations-history-store/{operationKey}");
-			return 0m;
+			var operationHistory = await Http.GetFromJsonAsync<OperationHistory>($"/v1.0/invoke/audit-app/method/audit/{operationKey}");
+			return operationHistory.Operations;
 		}
 	}
 }
