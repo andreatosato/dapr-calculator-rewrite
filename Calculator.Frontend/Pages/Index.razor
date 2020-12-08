@@ -24,6 +24,7 @@
             if (await localStorage.ContainKeyAsync(OperationKeyId).ConfigureAwait(false))
             {
                 var id = await localStorage.GetItemAsync<Guid>(OperationKeyId).ConfigureAwait(false);
+                OperationId = id;
                 decimal historyValue = await CalculatorService.GetCalculatorStatusDapr(id).ConfigureAwait(false);
                 SetInitCalculator(historyValue);
             }

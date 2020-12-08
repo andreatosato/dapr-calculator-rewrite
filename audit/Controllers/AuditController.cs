@@ -27,7 +27,7 @@ namespace audit.Controllers
         public async Task<IActionResult> Audit(Guid operationId,
             [FromServices] DaprClient daprClient)
         {
-            var state = await daprClient.GetStateEntryAsync<OperationHistory>(StoreName, operationId.ToString());
+            var state = await daprClient.GetStateEntryAsync<OperationHistory>(StoreName, operationId.ToString("N"));
             logger.LogInformation($"Read operations: {JsonSerializer.Serialize(state)}");
             if (state.Value == null)
                 return Ok(OperationHistory.None);
@@ -36,20 +36,26 @@ namespace audit.Controllers
         }
 
         [Topic("calculator", "CalculatorOperation")]
-        public async Task<ActionResult<OperationHistory>> PushElement(Operation operation, [FromServices] DaprClient daprClient)
+        public async Task PushElement(Operation operation, [FromServices] DaprClient daprClient)
         {
             logger.LogInformation($"Arrive event: {JsonSerializer.Serialize(operation)}");
             var state = await daprClient.GetStateEntryAsync<OperationHistory>(StoreName, operation.OperationData.Id);
-
-            if(state.Value == null)
-                state.Value = new OperationHistory(new Collection<Operation>
+            logger.LogInformation($"Current state: {JsonSerializer.Serialize(state)}");
+            if (state.Value == null || state.Value.Operations.Count == 0)
+            {
+                var newHistory = new OperationHistory(new Collection<Operation>
                 {
                     operation
                 });
+                await daprClient.SaveStateAsync(StoreName, operation.OperationData.Id, newHistory);
+                logger.LogInformation($"Save new event");
+            }
             else
+            {
                 state.Value.AddOperation(operation);
-            await state.SaveAsync();
-            return state.Value;            
+                await state.SaveAsync();
+                logger.LogInformation($"Update event");
+            }                          
         }
     }
 }
