@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: operations-store
+  name: operations-history-store
 spec:
   type: state.redis
   metadata:

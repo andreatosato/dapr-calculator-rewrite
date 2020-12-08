@@ -6,7 +6,7 @@ namespace audit
 {
     public class OperationHistory
 	{
-        public static ICollection<Operation> None = System.Array.Empty<Operation>();
+        public static OperationHistory None = new OperationHistory(System.Array.Empty<Operation>());
 		public OperationHistory(ICollection<Operation> operations)
 		{
             Operations = operations ?? new Collection<Operation>();

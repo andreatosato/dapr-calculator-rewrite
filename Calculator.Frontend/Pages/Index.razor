@@ -19,7 +19,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && OperationId == Guid.Empty)
         {
             if (await localStorage.ContainKeyAsync(OperationKeyId).ConfigureAwait(false))
             {

@@ -39,8 +39,10 @@ namespace audit
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseCloudEvents();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapControllers();
             });
         }
