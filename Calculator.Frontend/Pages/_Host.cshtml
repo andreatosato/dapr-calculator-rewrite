@@ -2,6 +2,7 @@
 @namespace Calculator.Frontend.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
+    Response.Headers["Cache-Control"] = "no-store";
     Layout = null;
 }
 
